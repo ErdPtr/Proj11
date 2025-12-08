@@ -19,16 +19,15 @@
             overflow: hidden;
         }
 
-            
             body::before {
                 content: "";
                 position: fixed;
-                inset: 0; 
+                inset: 0;
                 background-image: url("https://mateszalka.cms.szc.edir.hu/uploads/large_Gepeszeti_iskolakep_aac4144917.png");
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
-                filter: blur(6px) brightness(0.8); 
+                filter: blur(6px) brightness(0.8);
                 z-index: -1;
                 will-change: filter;
             }
@@ -231,6 +230,133 @@
             font-weight: 500;
             color: #333;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+
+            .modal-content h2 {
+                color: #333;
+                margin-bottom: 30px;
+                font-size: 24px;
+            }
+
+        .year-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+            .year-buttons button {
+                background-color: #4a4a4a;
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 500;
+                transition: all 0.3s;
+            }
+
+                .year-buttons button:hover {
+                    background-color: #c62828;
+                    transform: translateY(-2px);
+                }
+
+        .close-modal {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+            .close-modal:hover {
+                background-color: #d0d0d0;
+            }
+
+        .notebook-modal {
+            max-width: 90vw;
+            width: 1200px;
+            max-height: 90vh;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .notebook-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid #e0e0e0;
+            background-color: #f5f5f5;
+        }
+
+            .notebook-header h2 {
+                margin: 0;
+                color: #333;
+                font-size: 22px;
+            }
+
+            .notebook-header .close-modal {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                font-size: 20px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        .notebook-container {
+            height: calc(90vh - 82px);
+            position: relative;
+            background-color: #fafafa;
+        }
+
+            .notebook-container iframe {
+                width: 100%;
+                height: 100%;
+            }
+
+        .placeholder-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 24px;
+        }
+
+            .placeholder-text .placeholder-info {
+                font-size: 16px;
+                color: #999;
+                margin-top: 10px;
+            }
     </style>
 </head>
 <body>
@@ -247,11 +373,11 @@
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="selectSubject('Matematika')">- Matematika</li>
-                <li onclick="selectSubject('Magyar nyelv')">- Magyar nyelv</li>
-                <li onclick="selectSubject('Irodalom')">- Irodalom</li>
-                <li onclick="selectSubject('Angol/Német nyelv')">- Angol/Német nyelv</li>
-                <li onclick="selectSubject('Történelem')">- Történelem</li>
+                <li onclick="openNotebook('Matematika', 9)">- Matematika</li>
+                <li onclick="openNotebook('Magyar nyelv', 9)">- Magyar nyelv</li>
+                <li onclick="openNotebook('Irodalom', 9)">- Irodalom</li>
+                <li onclick="openNotebook('Angol/Német nyelv', 9)">- Angol/Német nyelv</li>
+                <li onclick="openNotebook('Történelem', 9)">- Történelem</li>
             </ul>
         </div>
 
@@ -261,11 +387,11 @@
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="selectSubject('Matematika')">- Matematika</li>
-                <li onclick="selectSubject('Magyar nyelv')">- Magyar nyelv</li>
-                <li onclick="selectSubject('Irodalom')">- Irodalom</li>
-                <li onclick="selectSubject('Angol/Német nyelv')">- Angol/Német nyelv</li>
-                <li onclick="selectSubject('Történelem')">- Történelem</li>
+                <li onclick="openNotebook('Matematika', 10)">- Matematika</li>
+                <li onclick="openNotebook('Magyar nyelv', 10)">- Magyar nyelv</li>
+                <li onclick="openNotebook('Irodalom', 10)">- Irodalom</li>
+                <li onclick="openNotebook('Angol/Német nyelv', 10)">- Angol/Német nyelv</li>
+                <li onclick="openNotebook('Történelem', 10)">- Történelem</li>
             </ul>
         </div>
 
@@ -275,11 +401,11 @@
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="selectSubject('Matematika')">- Matematika</li>
-                <li onclick="selectSubject('Magyar nyelv')">- Magyar nyelv</li>
-                <li onclick="selectSubject('Irodalom')">- Irodalom</li>
-                <li onclick="selectSubject('Angol/Német nyelv')">- Angol/Német nyelv</li>
-                <li onclick="selectSubject('Történelem')">- Történelem</li>
+                <li onclick="openNotebook('Matematika', 11)">- Matematika</li>
+                <li onclick="openNotebook('Magyar nyelv', 11)">- Magyar nyelv</li>
+                <li onclick="openNotebook('Irodalom', 11)">- Irodalom</li>
+                <li onclick="openNotebook('Angol/Német nyelv', 11)">- Angol/Német nyelv</li>
+                <li onclick="openNotebook('Történelem', 11)">- Történelem</li>
             </ul>
         </div>
 
@@ -289,11 +415,11 @@
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="selectSubject('Matematika')">- Matematika</li>
-                <li onclick="selectSubject('Magyar nyelv')">- Magyar nyelv</li>
-                <li onclick="selectSubject('Irodalom')">- Irodalom</li>
-                <li onclick="selectSubject('Angol/Német nyelv')">- Angol/Német nyelv</li>
-                <li onclick="selectSubject('Történelem')">- Történelem</li>
+                <li onclick="openNotebook('Matematika', 12)">- Matematika</li>
+                <li onclick="openNotebook('Magyar nyelv', 12)">- Magyar nyelv</li>
+                <li onclick="openNotebook('Irodalom', 12)">- Irodalom</li>
+                <li onclick="openNotebook('Angol/Német nyelv', 12)">- Angol/Német nyelv</li>
+                <li onclick="openNotebook('Történelem', 12)">- Történelem</li>
             </ul>
         </div>
 
@@ -303,11 +429,11 @@
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="selectSubject('Matematika')">- Matematika</li>
-                <li onclick="selectSubject('Magyar nyelv')">- Magyar nyelv</li>
-                <li onclick="selectSubject('Irodalom')">- Irodalom</li>
-                <li onclick="selectSubject('Angol/Német nyelv')">- Angol/Német nyelv</li>
-                <li onclick="selectSubject('Történelem')">- Történelem</li>
+                <li onclick="openNotebook('Matematika', 13)">- Matematika</li>
+                <li onclick="openNotebook('Magyar nyelv', 13)">- Magyar nyelv</li>
+                <li onclick="openNotebook('Irodalom', 13)">- Irodalom</li>
+                <li onclick="openNotebook('Angol/Német nyelv', 13)">- Angol/Német nyelv</li>
+                <li onclick="openNotebook('Történelem', 13)">- Történelem</li>
             </ul>
         </div>
     </div>
@@ -346,7 +472,39 @@
         </div>
     </div>
 
+    <div id="yearModal" class="modal">
+        <div class="modal-content">
+            <h2>Válassz évfolyamot</h2>
+            <div class="year-buttons">
+                <button onclick="openNotebook(currentSubject, 9)">9. évfolyam</button>
+                <button onclick="openNotebook(currentSubject, 10)">10. évfolyam</button>
+                <button onclick="openNotebook(currentSubject, 11)">11. évfolyam</button>
+                <button onclick="openNotebook(currentSubject, 12)">12. évfolyam</button>
+                <button onclick="openNotebook(currentSubject, 13)">13. évfolyam</button>
+            </div>
+            <button class="close-modal" onclick="closeYearModal()">Bezárás</button>
+        </div>
+    </div>
+
+    <div id="notebookModal" class="modal">
+        <div class="modal-content notebook-modal">
+            <div class="notebook-header">
+                <h2 id="notebookTitle"></h2>
+                <button class="close-modal" onclick="closeNotebookModal()">✕</button>
+            </div>
+            <div class="notebook-container">
+                <iframe id="notebookEmbed" src="" frameborder="0"></iframe>
+                <div class="placeholder-text">
+                    <p>📓 Itt fog megjelenni a digitális tankönyv</p>
+                    <p class="placeholder-info">Az online notebook embed helye</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        let currentSubject = '';
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('toggleBtn');
@@ -369,15 +527,37 @@
             arrow.classList.toggle('open');
         }
 
-        function selectSubject(subject) {
-            console.log('Selected subject:', subject);
-            alert('Tantárgy kiválasztva: ' + subject);
+        function openSubject(subject) {
+            currentSubject = subject;
+            document.getElementById('yearModal').style.display = 'flex';
         }
 
-        function openSubject(subject) {
-            console.log('Opening subject:', subject);
-            alert('Tantárgy megnyitva: ' + subject);
+        function closeYearModal() {
+            document.getElementById('yearModal').style.display = 'none';
         }
+
+        function openNotebook(subject, year) {
+            closeYearModal();
+
+            document.getElementById('notebookTitle').textContent = `${subject} - ${year}. évfolyam`;
+            document.getElementById('notebookModal').style.display = 'flex';
+
+            // Itt később beállítható a valódi notebook URL
+            // document.getElementById('notebookEmbed').src = 'NOTEBOOK_URL_HERE';
+        }
+
+        function closeNotebookModal() {
+            document.getElementById('notebookModal').style.display = 'none';
+            document.getElementById('notebookEmbed').src = '';
+        }
+
+        // Escape key to close modals
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeYearModal();
+                closeNotebookModal();
+            }
+        });
     </script>
 </body>
 </html>
