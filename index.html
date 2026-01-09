@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSZC Gépészeti Technikum - Digitális Tankönyv Készlet</title>
+    <title>MSZC Gépészeti Technikum - Digitális Tankönyvtár</title>
     <style>
         * {
             margin: 0;
@@ -19,18 +19,18 @@
             overflow: hidden;
         }
 
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                background-image: url("https://mateszalka.cms.szc.edir.hu/uploads/large_Gepeszeti_iskolakep_aac4144917.png");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                filter: blur(6px) brightness(0.8);
-                z-index: -1;
-                will-change: filter;
-            }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url("https://mateszalka.cms.szc.edir.hu/uploads/large_Gepeszeti_iskolakep_aac4144917.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(6px) brightness(0.8);
+            z-index: -1;
+            will-change: filter;
+        }
 
         .sidebar {
             width: 260px;
@@ -46,9 +46,9 @@
             transform: translateX(-260px);
         }
 
-            .sidebar.visible {
-                transform: translateX(0);
-            }
+        .sidebar.visible {
+            transform: translateX(0);
+        }
 
         .logo-container {
             display: flex;
@@ -63,22 +63,6 @@
             width: 80px;
             height: auto;
         }
-
-        .close-button {
-            background-color: #c4c4c4;
-            color: #333;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-            .close-button:hover {
-                background-color: #d4d4d4;
-            }
 
         .toggle-button {
             position: fixed;
@@ -97,13 +81,13 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
 
-            .toggle-button:hover {
-                background-color: #d4d4d4;
-            }
+        .toggle-button:hover {
+            background-color: #d4d4d4;
+        }
 
-            .toggle-button.shifted {
-                left: 280px;
-            }
+        .toggle-button.shifted {
+            left: 280px;
+        }
 
         .grade-section {
             margin-bottom: 10px;
@@ -121,18 +105,18 @@
             transition: all 0.3s;
         }
 
-            .grade-header:hover {
-                background-color: rgba(255,255,255,0.1);
-            }
+        .grade-header:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
 
         .arrow {
             transition: transform 0.3s;
             font-size: 12px;
         }
 
-            .arrow.open {
-                transform: rotate(180deg);
-            }
+        .arrow.open {
+            transform: rotate(180deg);
+        }
 
         .subject-list {
             list-style: none;
@@ -141,23 +125,23 @@
             transition: max-height 0.3s ease;
         }
 
-            .subject-list.open {
-                max-height: 500px;
-            }
+        .subject-list.open {
+            max-height: 500px;
+        }
 
-            .subject-list li {
-                padding: 8px 0;
-                padding-left: 30px;
-                font-size: 14px;
-                border-left: 3px solid transparent;
-                cursor: pointer;
-                transition: all 0.3s;
-            }
+        .subject-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            font-size: 14px;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-                .subject-list li:hover {
-                    border-left-color: #c62828;
-                    background-color: rgba(255,255,255,0.1);
-                }
+        .subject-list li:hover {
+            border-left-color: #c62828;
+            background-color: rgba(255,255,255,0.1);
+        }
 
         .main-content {
             flex: 1;
@@ -176,56 +160,58 @@
             margin-bottom: 30px;
         }
 
-            .header-logo img {
-                width: 200px;
-                height: auto;
-                margin-bottom: 15px;
-            }
+        .header-logo img {
+            width: 200px;
+            height: auto;
+            margin-bottom: 15px;
+        }
 
-            .header-logo h1 {
-                color: white;
-                font-size: 28px;
-                font-weight: 500;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }
+        .header-logo h1 {
+            color: white;
+            font-size: 28px;
+            font-weight: 500;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-        .subject-cards {
+        .grade-cards {
             background-color: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 60px 80px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             display: flex;
             flex-wrap: wrap;
-            gap: 60px;
+            gap: 40px;
             align-items: center;
             justify-content: center;
-            max-width: 1000px;
+            max-width: 900px;
         }
 
-        .subject-card {
+        .grade-card {
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s;
-            width: 150px;
+            width: 140px;
         }
 
-            .subject-card:hover {
-                transform: translateY(-10px);
-            }
+        .grade-card:hover {
+            transform: translateY(-10px);
+        }
 
-        .subject-icon {
+        .grade-icon {
             width: 120px;
             height: 120px;
             margin: 0 auto 15px;
-            background-color: #e0e0e0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
+            font-weight: bold;
+            color: white;
         }
 
-        .subject-name {
+        .grade-name {
             font-size: 18px;
             font-weight: 500;
             color: #333;
@@ -247,38 +233,82 @@
             padding: 40px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             text-align: center;
-            max-width: 500px;
+            max-width: 600px;
         }
 
-            .modal-content h2 {
-                color: #333;
-                margin-bottom: 30px;
-                font-size: 24px;
-            }
+        .modal-content h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
 
-        .year-buttons {
-            display: flex;
-            flex-direction: column;
+        .major-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 25px;
         }
 
-            .year-buttons button {
-                background-color: #4a4a4a;
-                color: white;
-                border: none;
-                padding: 15px 30px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 16px;
-                font-weight: 500;
-                transition: all 0.3s;
-            }
+        .major-buttons button {
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
 
-                .year-buttons button:hover {
-                    background-color: #c62828;
-                    transform: translateY(-2px);
-                }
+        .major-buttons button:hover {
+            background-color: #c62828;
+            transform: translateY(-2px);
+        }
+
+        .class-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .class-section.visible {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .class-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .class-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .class-item {
+            background-color: #f5f5f5;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            border-left: 4px solid #4a4a4a;
+        }
+
+        .class-item:hover {
+            background-color: #e0e0e0;
+            border-left-color: #c62828;
+            transform: translateX(5px);
+        }
 
         .close-modal {
             background-color: #e0e0e0;
@@ -292,9 +322,9 @@
             transition: background-color 0.3s;
         }
 
-            .close-modal:hover {
-                background-color: #d0d0d0;
-            }
+        .close-modal:hover {
+            background-color: #d0d0d0;
+        }
 
         .notebook-modal {
             max-width: 90vw;
@@ -313,22 +343,22 @@
             background-color: #f5f5f5;
         }
 
-            .notebook-header h2 {
-                margin: 0;
-                color: #333;
-                font-size: 22px;
-            }
+        .notebook-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 22px;
+        }
 
-            .notebook-header .close-modal {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                font-size: 20px;
-                padding: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+        .notebook-header .close-modal {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .notebook-container {
             height: calc(90vh - 82px);
@@ -336,10 +366,10 @@
             background-color: #fafafa;
         }
 
-            .notebook-container iframe {
-                width: 100%;
-                height: 100%;
-            }
+        .notebook-container iframe {
+            width: 100%;
+            height: 100%;
+        }
 
         .placeholder-text {
             position: absolute;
@@ -352,11 +382,11 @@
             font-size: 24px;
         }
 
-            .placeholder-text .placeholder-info {
-                font-size: 16px;
-                color: #999;
-                margin-top: 10px;
-            }
+        .placeholder-text .placeholder-info {
+            font-size: 16px;
+            color: #999;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -364,125 +394,121 @@
 
     <div class="sidebar" id="sidebar">
         <div class="logo-container">
-            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" class="logo" alt="Gépészeti Logo" id="logoImg">
+            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" class="logo" alt="Gépészeti Logo">
         </div>
 
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
-                <span>9. évfolyam</span>
+                <span>Informatika</span>
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="openNotebook('Matematika', 9)">- Matematika</li>
-                <li onclick="openNotebook('Magyar nyelv', 9)">- Magyar nyelv</li>
-                <li onclick="openNotebook('Irodalom', 9)">- Irodalom</li>
-                <li onclick="openNotebook('Angol/Német nyelv', 9)">- Angol/Német nyelv</li>
-                <li onclick="openNotebook('Történelem', 9)">- Történelem</li>
+                <li onclick="openSidebarGrade('Informatika', 9)">- 9. évfolyam</li>
+                <li onclick="openSidebarGrade('Informatika', 10)">- 10. évfolyam</li>
+                <li onclick="openSidebarGrade('Informatika', 11)">- 11. évfolyam</li>
+                <li onclick="openSidebarGrade('Informatika', 12)">- 12. évfolyam</li>
             </ul>
         </div>
 
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
-                <span>10. évfolyam</span>
+                <span>Gépész</span>
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="openNotebook('Matematika', 10)">- Matematika</li>
-                <li onclick="openNotebook('Magyar nyelv', 10)">- Magyar nyelv</li>
-                <li onclick="openNotebook('Irodalom', 10)">- Irodalom</li>
-                <li onclick="openNotebook('Angol/Német nyelv', 10)">- Angol/Német nyelv</li>
-                <li onclick="openNotebook('Történelem', 10)">- Történelem</li>
+                <li onclick="openSidebarGrade('Gépész', 9)">- 9. évfolyam</li>
+                <li onclick="openSidebarGrade('Gépész', 10)">- 10. évfolyam</li>
+                <li onclick="openSidebarGrade('Gépész', 11)">- 11. évfolyam</li>
+                <li onclick="openSidebarGrade('Gépész', 12)">- 12. évfolyam</li>
             </ul>
         </div>
 
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
-                <span>11. évfolyam</span>
+                <span>Közgáz</span>
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="openNotebook('Matematika', 11)">- Matematika</li>
-                <li onclick="openNotebook('Magyar nyelv', 11)">- Magyar nyelv</li>
-                <li onclick="openNotebook('Irodalom', 11)">- Irodalom</li>
-                <li onclick="openNotebook('Angol/Német nyelv', 11)">- Angol/Német nyelv</li>
-                <li onclick="openNotebook('Történelem', 11)">- Történelem</li>
+                <li onclick="openSidebarGrade('Közgáz', 9)">- 9. évfolyam</li>
+                <li onclick="openSidebarGrade('Közgáz', 10)">- 10. évfolyam</li>
+                <li onclick="openSidebarGrade('Közgáz', 11)">- 11. évfolyam</li>
+                <li onclick="openSidebarGrade('Közgáz', 12)">- 12. évfolyam</li>
             </ul>
         </div>
 
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
-                <span>12. évfolyam</span>
+                <span>Rendészet</span>
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="openNotebook('Matematika', 12)">- Matematika</li>
-                <li onclick="openNotebook('Magyar nyelv', 12)">- Magyar nyelv</li>
-                <li onclick="openNotebook('Irodalom', 12)">- Irodalom</li>
-                <li onclick="openNotebook('Angol/Német nyelv', 12)">- Angol/Német nyelv</li>
-                <li onclick="openNotebook('Történelem', 12)">- Történelem</li>
+                <li onclick="openSidebarGrade('Rendészet', 9)">- 9. évfolyam</li>
+                <li onclick="openSidebarGrade('Rendészet', 10)">- 10. évfolyam</li>
+                <li onclick="openSidebarGrade('Rendészet', 11)">- 11. évfolyam</li>
+                <li onclick="openSidebarGrade('Rendészet', 12)">- 12. évfolyam</li>
             </ul>
         </div>
 
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
-                <span>13. évfolyam</span>
+                <span>Egészségügy</span>
                 <span class="arrow">▼</span>
             </div>
             <ul class="subject-list">
-                <li onclick="openNotebook('Matematika', 13)">- Matematika</li>
-                <li onclick="openNotebook('Magyar nyelv', 13)">- Magyar nyelv</li>
-                <li onclick="openNotebook('Irodalom', 13)">- Irodalom</li>
-                <li onclick="openNotebook('Angol/Német nyelv', 13)">- Angol/Német nyelv</li>
-                <li onclick="openNotebook('Történelem', 13)">- Történelem</li>
+                <li onclick="openSidebarGrade('Egészségügy', 9)">- 9. évfolyam</li>
+                <li onclick="openSidebarGrade('Egészségügy', 10)">- 10. évfolyam</li>
+                <li onclick="openSidebarGrade('Egészségügy', 11)">- 11. évfolyam</li>
+                <li onclick="openSidebarGrade('Egészségügy', 12)">- 12. évfolyam</li>
             </ul>
         </div>
     </div>
 
     <div class="main-content" id="mainContent">
         <div class="header-logo">
-            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="MSZC Logo" id="headerLogoImg">
+            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="MSZC Logo">
             <h1>MSZC Gépészeti Technikum - Digitális Tankönyv Készlet</h1>
         </div>
 
-        <div class="subject-cards">
-            <div class="subject-card" onclick="openSubject('Történelem')">
-                <div class="subject-icon">📚</div>
-                <div class="subject-name">Történelem</div>
+        <div class="grade-cards">
+            <div class="grade-card" onclick="openGrade(9)">
+                <div class="grade-icon">9</div>
+                <div class="grade-name">9. évfolyam</div>
             </div>
 
-            <div class="subject-card" onclick="openSubject('Matematika')">
-                <div class="subject-icon">🔢</div>
-                <div class="subject-name">Matematika</div>
+            <div class="grade-card" onclick="openGrade(10)">
+                <div class="grade-icon">10</div>
+                <div class="grade-name">10. évfolyam</div>
             </div>
 
-            <div class="subject-card" onclick="openSubject('Magyar nyelv')">
-                <div class="subject-icon">📝</div>
-                <div class="subject-name">Magyar nyelv</div>
+            <div class="grade-card" onclick="openGrade(11)">
+                <div class="grade-icon">11</div>
+                <div class="grade-name">11. évfolyam</div>
             </div>
 
-            <div class="subject-card" onclick="openSubject('Irodalom')">
-                <div class="subject-icon">📖</div>
-                <div class="subject-name">Irodalom</div>
-            </div>
-
-            <div class="subject-card" onclick="openSubject('Angol/Német nyelv')">
-                <div class="subject-icon">🌍</div>
-                <div class="subject-name">Angol/Német nyelv</div>
+            <div class="grade-card" onclick="openGrade(12)">
+                <div class="grade-icon">12</div>
+                <div class="grade-name">12. évfolyam</div>
             </div>
         </div>
     </div>
 
-    <div id="yearModal" class="modal">
+    <div id="majorModal" class="modal">
         <div class="modal-content">
-            <h2>Válassz évfolyamot</h2>
-            <div class="year-buttons">
-                <button onclick="openNotebook(currentSubject, 9)">9. évfolyam</button>
-                <button onclick="openNotebook(currentSubject, 10)">10. évfolyam</button>
-                <button onclick="openNotebook(currentSubject, 11)">11. évfolyam</button>
-                <button onclick="openNotebook(currentSubject, 12)">12. évfolyam</button>
-                <button onclick="openNotebook(currentSubject, 13)">13. évfolyam</button>
+            <h2 id="majorModalTitle">Válassz szakot</h2>
+            <div class="major-buttons">
+                <button onclick="selectMajor('Informatika')">💻 Informatika</button>
+                <button onclick="selectMajor('Gépész')">⚙️ Gépész</button>
+                <button onclick="selectMajor('Közgáz')">📊 Közgáz</button>
+                <button onclick="selectMajor('Rendészet')">🛡️ Rendészet</button>
+                <button onclick="selectMajor('Egészségügy')">⚕️ Egészségügy</button>
             </div>
-            <button class="close-modal" onclick="closeYearModal()">Bezárás</button>
+            
+            <div id="classSection" class="class-section">
+                <h3>Válassz tantárgyat</h3>
+                <div id="classList" class="class-list"></div>
+            </div>
+            
+            <button class="close-modal" onclick="closeMajorModal()">Bezárás</button>
         </div>
     </div>
 
@@ -503,7 +529,15 @@
     </div>
 
     <script>
-        let currentSubject = '';
+        let currentGrade = null;
+        let currentMajor = null;
+        const subjectData = {
+            'Informatika': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Informatika', 'Programozás'],
+            'Gépész': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika', 'Gépészeti alapismeretek', 'Műszaki rajz'],
+            'Közgáz': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Közgazdaságtan', 'Üzleti ismeretek'],
+            'Rendészet': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Jog', 'Rendészeti ismeretek', 'Testnevelés'],
+            'Egészségügy': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia', 'Egészségügyi ismeretek', 'Anatómia']
+        };
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -527,34 +561,79 @@
             arrow.classList.toggle('open');
         }
 
-        function openSubject(subject) {
-            currentSubject = subject;
-            document.getElementById('yearModal').style.display = 'flex';
+        function openGrade(grade) {
+            currentGrade = grade;
+            document.getElementById('majorModalTitle').textContent = `Válassz szakot - ${grade}. évfolyam`;
+            document.getElementById('majorModal').style.display = 'flex';
+            document.getElementById('classSection').classList.remove('visible');
+            document.querySelector('.major-buttons').style.display = 'grid';
         }
 
-        function closeYearModal() {
-            document.getElementById('yearModal').style.display = 'none';
+        function selectMajor(major) {
+            currentMajor = major;
+            const classList = document.getElementById('classList');
+            const classSection = document.getElementById('classSection');
+            
+            classList.innerHTML = '';
+            
+            const subjects = subjectData[major];
+            subjects.forEach(subject => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.textContent = subject;
+                classItem.onclick = () => openNotebook(subject, currentGrade, major);
+                classList.appendChild(classItem);
+            });
+            
+            classSection.classList.add('visible');
         }
 
-        function openNotebook(subject, year) {
-            closeYearModal();
+        function closeMajorModal() {
+            document.getElementById('majorModal').style.display = 'none';
+            document.getElementById('classSection').classList.remove('visible');
+            currentGrade = null;
+            currentMajor = null;
+        }
 
-            document.getElementById('notebookTitle').textContent = `${subject} - ${year}. évfolyam`;
+        function openSidebarGrade(major, grade) {
+            currentGrade = grade;
+            currentMajor = major;
+            document.getElementById('majorModalTitle').textContent = `${major} - ${grade}. évfolyam - Válassz tantárgyat`;
+            
+            const classList = document.getElementById('classList');
+            const classSection = document.getElementById('classSection');
+            
+            classList.innerHTML = '';
+            
+            const subjects = subjectData[major];
+            subjects.forEach(subject => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.textContent = subject;
+                classItem.onclick = () => openNotebook(subject, grade, major);
+                classList.appendChild(classItem);
+            });
+            
+            classSection.classList.add('visible');
+            document.getElementById('majorModal').style.display = 'flex';
+            document.querySelector('.major-buttons').style.display = 'none';
+        }
+
+        function openNotebook(subject, year, major) {
+            closeMajorModal();
+
+            const displayText = major ? `${subject} - ${year}. évfolyam (${major})` : `${subject} - ${year}. évfolyam`;
+            document.getElementById('notebookTitle').textContent = displayText;
             document.getElementById('notebookModal').style.display = 'flex';
-
-            // Itt később beállítható a valódi notebook URL
-            // document.getElementById('notebookEmbed').src = 'NOTEBOOK_URL_HERE';
         }
 
         function closeNotebookModal() {
             document.getElementById('notebookModal').style.display = 'none';
             document.getElementById('notebookEmbed').src = '';
         }
-
-        // Escape key to close modals
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
-                closeYearModal();
+                closeMajorModal();
                 closeNotebookModal();
             }
         });
