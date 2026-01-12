@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
@@ -528,6 +528,9 @@
 
             <div id="classSection" class="class-section">
                 <h3>Válassz tantárgyat</h3>
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px; text-align: center;">
+                    ℹ️ Csak azok a tantárgyak jelennek meg, amelyekhez tankönyvet kaptál!
+                </p>
                 <div id="classList" class="class-list"></div>
             </div>
 
@@ -557,32 +560,61 @@
 
         // Subject data structure - subjects available for each major
         const subjectData = {
-            'Informatika': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Informatika', 'Programozás'],
-            'Gépész': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Fizika', 'Gépészeti alapismeretek', 'Műszaki rajz'],
-            'Közgáz': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Közgazdaságtan', 'Üzleti ismeretek'],
-            'Rendészet': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Jog', 'Rendészeti ismeretek', 'Testnevelés'],
-            'Egészségügy': ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Biológia', 'Egészségügyi ismeretek', 'Anatómia']
+            'Informatika': {
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+            },
+            'Gépész': {
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Gépészeti alapismeretek'],
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Műszaki rajz']
+            },
+            'Közgáz': {
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Közgazdaságtan'],
+                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Üzleti ismeretek'],
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+            },
+            'Rendészet': {
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Testnevelés'],
+                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Jog'],
+                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Rendészeti ismeretek'],
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+            },
+            'Egészségügy': {
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
+                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
+                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Egészségügyi ismeretek'],
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Anatómia']
+            }
         };
 
-        // Links data structure - placeholder for future PDF links
         const linksData = {
-            // Matematika 12th grade for all majors
+            // Matematika 12
             'Matematika_12_Informatika': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Emelt szintű matematika tankönyv' }
+                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
             ],
             'Matematika_12_Gépész': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Emelt szintű matematika tankönyv' }
+                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
             ],
             'Matematika_12_Közgáz': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Emelt szintű matematika tankönyv' }
+                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
             ],
             'Matematika_12_Rendészet': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Emelt szintű matematika tankönyv' }
+                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
             ],
             'Matematika_12_Egészségügy': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Emelt szintű matematika tankönyv' }
+                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
             ],
-            // Irodalom 12th grade for all majors
+            // Irodalom 12
             'Irodalom_12_Informatika': [
                 { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
                 { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
@@ -603,7 +635,7 @@
                 { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
                 { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
             ],
-            // Történelem 12th grade for all majors
+            // Történelem 12t
             'Történelem_12_Informatika': [
                 { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
                 { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
@@ -624,7 +656,7 @@
                 { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
                 { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
             ],
-            // Állampolgári ismeretek 12th grade for all majors
+            // Állampolgári ismeretek 12
             'Állampolgári ismeretek_12_Informatika': [
                 { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
@@ -640,7 +672,23 @@
             'Állampolgári ismeretek_12_Egészségügy': [
                 { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
-            
+            // Magyar nyelv 12
+            'Magyar nyelv_12_Informatika': [
+                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+            ],
+            'Magyar nyelv_12_Gépész': [
+                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+            ],
+            'Magyar nyelv_12_Közgáz': [
+                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+            ],
+            'Magyar nyelv_12_Rendészet': [
+                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+            ],
+            'Magyar nyelv_12_Egészségügy': [
+                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+            ],
+
     };
 
     function toggleSidebar() {
@@ -680,7 +728,7 @@
 
         classList.innerHTML = '';
 
-        const subjects = subjectData[major];
+        const subjects = subjectData[major][currentGrade];
         subjects.forEach(subject => {
             const classItem = document.createElement('div');
             classItem.className = 'class-item';
