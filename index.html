@@ -1,129 +1,250 @@
 ﻿<!DOCTYPE html>
 <html lang="hu">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSZC Gépészeti Technikum - Digitális Tankönyvtár</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            position: relative;
-            overflow: hidden;
-        }
-
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                background-image: url("https://mateszalka.cms.szc.edir.hu/uploads/large_Gepeszeti_iskolakep_aac4144917.png");
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                filter: blur(6px) brightness(0.8);
-                z-index: -1;
-                will-change: filter;
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MSZC Gépészeti Technikum - Digitális Tankönyvtár</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
 
-        .sidebar {
-            width: 260px;
-            background-color: #4a4a4a;
-            color: white;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
-            transform: translateX(-260px);
-        }
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                position: relative;
+                overflow: hidden;
+            }
+
+            body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("https://mateszalka.cms.szc.edir.hu/uploads/large_Gepeszeti_iskolakep_aac4144917.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(8px) brightness(0.8); /* Ez marad fixen */
+    z-index: -1;
+}
+
+/* Ez a rész kapcsolja be a homályosítást, ha látszik a login vagy register */
+body:has(#loginScreen:not([style*="display: none"]))::before,
+body:has(#registerScreen:not([style*="display: none"]))::before {
+    filter: blur(8px) brightness(0.7);
+}
+
+            #appContent .toggle-button {
+                display: block;
+            }
+
+            #loginScreen, #registerScreen {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 9999;
+                background: transparent;
+            }
+
+            .sidebar {
+                width: 260px;
+                background-color: #4a4a4a;
+                color: white;
+                padding: 20px;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+                transition: transform 0.3s ease;
+                position: fixed;
+                height: 100vh;
+                overflow-y: auto;
+                z-index: 1000;
+                transform: translateX(-260px);
+            }
 
             .sidebar.visible {
                 transform: translateX(0);
             }
-
-        .logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #666;
-        }
-
-        .logo {
-            width: 80px;
-            height: auto;
-        }
-
-        .toggle-button {
-            position: fixed;
-            left: 20px;
-            top: 20px;
-            background-color: #c4c4c4;
-            color: #333;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            z-index: 999;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-            .toggle-button:hover {
-                background-color: #d4d4d4;
+            #authWrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
             }
 
-            .toggle-button.shifted {
-                left: 280px;
+            .auth-card {
+                background: rgba(255, 255, 255, 0.95);
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                width: 350px;
+                text-align: center;
+                backdrop-filter: blur(10px);
             }
 
-        .grade-section {
-            margin-bottom: 10px;
-        }
-
-        .grade-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-            .grade-header:hover {
-                background-color: rgba(255,255,255,0.1);
+            .auth-card h2 {
+                margin-bottom: 25px;
+                color: #333;
+                font-size: 24px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
             }
 
-        .arrow {
-            transition: transform 0.3s;
-            font-size: 12px;
-        }
-
-            .arrow.open {
-                transform: rotate(180deg);
+            .auth-card form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
             }
 
-        .subject-list {
-            list-style: none;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
+            .auth-card input {
+                padding: 12px 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+
+            .auth-card input:focus {
+                outline: none;
+                border-color: #4a4a4a;
+            }
+
+            .auth-card button {
+                padding: 12px;
+                background-color: #4a4a4a;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background 0.3s;
+            }
+
+            .auth-card button:hover {
+                background-color: #333;
+            }
+
+            .auth-card p {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #666;
+            }
+
+            .auth-card .switch-link {
+                color: #4a4a4a;
+                text-decoration: none;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .auth-card .switch-link:hover {
+                text-decoration: underline;
+            }
+
+            #loginError, #registerError, #registerSuccess {
+                font-size: 13px;
+                margin-top: 10px;
+                display: none;
+            }
+
+            .logout-btn {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 10px 20px;
+                background: rgba(255, 255, 255, 0.8);
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                cursor: pointer;
+                z-index: 1001;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            .logout-btn:hover {
+                background: #fff;
+                color: #d9534f;
+            }
+
+            .logo-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #666;
+            }
+
+            .logo {
+                width: 80px;
+                height: auto;
+            }
+
+            .toggle-button {
+                position: fixed;
+                left: 20px;
+                top: 20px;
+                background-color: #c4c4c4;
+                color: #333;
+                border: none;
+                padding: 10px 18px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: all 0.3s;
+                z-index: 999;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+
+                .toggle-button:hover {
+                    background-color: #d4d4d4;
+                }
+
+                .toggle-button.shifted {
+                    left: 280px;
+                }
+
+            .grade-section {
+                margin-bottom: 10px;
+            }
+
+            .grade-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 15px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                border-radius: 4px;
+                transition: all 0.3s;
+            }
+
+                .grade-header:hover {
+                    background-color: rgba(255,255,255,0.1);
+                }
+
+            .arrow {
+                transition: transform 0.3s;
+                font-size: 12px;
+            }
+
+                .arrow.open {
+                    transform: rotate(180deg);
+                }
+
+            .subject-list {
+                list-style: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
 
             .subject-list.open {
                 max-height: 500px;
@@ -138,27 +259,27 @@
                 transition: all 0.3s;
             }
 
-                .subject-list li:hover {
-                    border-left-color: #c62828;
-                    background-color: rgba(255,255,255,0.1);
-                }
+            .subject-list li:hover {
+                border-left-color: #c62828;
+                background-color: rgba(255,255,255,0.1);
+            }
 
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-            margin-left: 0;
-            transition: margin-left 0.3s ease;
-            z-index: 1;
-        }
+            .main-content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 40px;
+                margin-left: 0;
+                transition: margin-left 0.3s ease;
+                z-index: 1;
+            }
 
-        .header-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+            .header-logo {
+                text-align: center;
+                margin-bottom: 30px;
+            }
 
             .header-logo img {
                 width: 200px;
@@ -173,82 +294,82 @@
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             }
 
-        .grade-cards {
-            background-color: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 60px 80px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            align-items: center;
-            justify-content: center;
-            max-width: 900px;
-        }
+            .grade-cards {
+                background-color: rgba(255,255,255,0.95);
+                border-radius: 20px;
+                padding: 60px 80px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                display: flex;
+                flex-wrap: wrap;
+                gap: 40px;
+                align-items: center;
+                justify-content: center;
+                max-width: 900px;
+            }
 
-        .grade-card {
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-            width: 140px;
-        }
+            .grade-card {
+                text-align: center;
+                cursor: pointer;
+                transition: transform 0.3s;
+                width: 140px;
+            }
 
             .grade-card:hover {
                 transform: translateY(-10px);
             }
 
-        .grade-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .grade-name {
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background-color: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            text-align: center;
-            max-width: 850px;
-            width: 90%;
-        }
-
-            .modal-content h2 {
-                color: #333;
-                margin-bottom: 30px;
-                font-size: 24px;
+            .grade-icon {
+                width: 120px;
+                height: 120px;
+                margin: 0 auto 15px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 48px;
+                font-weight: bold;
+                color: white;
             }
 
-        .major-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+            .grade-name {
+                font-size: 18px;
+                font-weight: 500;
+                color: #333;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background-color: rgba(0,0,0,0.7);
+                z-index: 2000;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal-content {
+                background-color: white;
+                border-radius: 15px;
+                padding: 40px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                text-align: center;
+                max-width: 850px;
+                width: 90%;
+            }
+
+                .modal-content h2 {
+                    color: #333;
+                    margin-bottom: 30px;
+                    font-size: 24px;
+                }
+
+            .major-buttons {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 15px;
+                margin-bottom: 25px;
+            }
 
             .major-buttons button {
                 background-color: #4a4a4a;
@@ -262,20 +383,20 @@
                 transition: all 0.3s;
             }
 
-                .major-buttons button:hover {
-                    background-color: #c62828;
-                    transform: translateY(-2px);
-                }
+            .major-buttons button:hover {
+                background-color: #c62828;
+                transform: translateY(-2px);
+            }
 
-        .class-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 2px solid #e0e0e0;
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.5s ease;
-        }
+            .class-section {
+                margin-top: 30px;
+                padding-top: 30px;
+                border-top: 2px solid #e0e0e0;
+                max-height: 0;
+                overflow: hidden;
+                opacity: 0;
+                transition: all 0.5s ease;
+            }
 
             .class-section.visible {
                 max-height: 600px;
@@ -288,22 +409,22 @@
                 font-size: 20px;
             }
 
-        .class-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+            .class-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
 
-        .class-item {
-            background-color: #f5f5f5;
-            padding: 15px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: left;
-            border-left: 4px solid #4a4a4a;
-        }
+            .class-item {
+                background-color: #f5f5f5;
+                padding: 15px 20px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s;
+                text-align: left;
+                border-left: 4px solid #4a4a4a;
+            }
 
             .class-item:hover {
                 background-color: #e0e0e0;
@@ -311,35 +432,35 @@
                 transform: translateX(5px);
             }
 
-        .close-modal {
-            background-color: #e0e0e0;
-            color: #333;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background-color 0.3s;
-        }
+            .close-modal {
+                background-color: #e0e0e0;
+                color: #333;
+                border: none;
+                padding: 10px 25px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.3s;
+            }
 
             .close-modal:hover {
                 background-color: #d0d0d0;
             }
 
-        .links-modal {
-            max-width: 700px;
-            width: 90%;
-        }
+            .links-modal {
+                max-width: 700px;
+                width: 90%;
+            }
 
-        .links-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-            margin-bottom: 30px;
-        }
+            .links-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 20px;
+                border-bottom: 2px solid #e0e0e0;
+                margin-bottom: 30px;
+            }
 
             .links-header h2 {
                 margin: 0;
@@ -347,486 +468,655 @@
                 font-size: 22px;
             }
 
-        .links-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 60vh;
-            overflow-y: auto;
-            padding: 10px;
-        }
+            .links-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                max-height: 60vh;
+                overflow-y: auto;
+                padding: 10px;
+            }
 
-        .link-item {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+            .link-item {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px 25px;
+                border-radius: 10px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                transition: all 0.3s;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
 
             .link-item:hover {
                 transform: translateY(-3px);
                 box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             }
 
-        .link-item-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-        }
+            .link-item-content {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
 
-        .link-item-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
+            .link-item-title {
+                font-size: 18px;
+                font-weight: 600;
+            }
 
-        .link-item-description {
-            font-size: 14px;
-            opacity: 0.9;
-        }
+            .link-item-description {
+                font-size: 14px;
+                opacity: 0.9;
+            }
 
-        .link-item-icon {
-            font-size: 24px;
-        }
+            .link-item-icon {
+                font-size: 24px;
+            }
 
-        .no-links-message {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-size: 16px;
-        }
+            .no-links-message {
+                text-align: center;
+                padding: 40px;
+                color: #666;
+                font-size: 16px;
+            }
 
             .no-links-message p {
                 margin-bottom: 10px;
             }
 
-        .no-links-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-    </style>
-</head>
-<body>
-    <button class="toggle-button" id="toggleBtn" onclick="toggleSidebar()">&gt;&gt;</button>
-
-    <div class="sidebar" id="sidebar">
-        <div class="logo-container">
-            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" class="logo" alt="Gépészeti Logo">
-        </div>
-
-        <div class="grade-section">
-            <div class="grade-header" onclick="toggleGrade(this)">
-                <span>Informatika</span>
-                <span class="arrow">▼</span>
+            .no-links-icon {
+                font-size: 48px;
+                margin-bottom: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div id="loginScreen">
+                <div id="authWrapper">
+                    <div class="auth-card">
+                        <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="Logo" style="width: 80px; margin-bottom: 10px;">
+                        <h2>Bejelentkezés</h2>
+                        <form id="loginForm">
+                            <input type="text" id="username" placeholder="Felhasználónév" required>
+                            <input type="password" id="password" placeholder="Jelszó" required>
+                            <button type="submit">Belépés</button>
+                        </form>
+                        <p id="loginError" style="color:red;">Hibás felhasználónév vagy jelszó!</p>
+                        <p>Nincs még fiókod? <span class="switch-link" onclick="showRegister()">Regisztrálj itt!</span></p>
+                    </div>
+                </div>
             </div>
-            <ul class="subject-list">
-                <li onclick="openSidebarGrade('Informatika', 9)">- 9. évfolyam</li>
-                <li onclick="openSidebarGrade('Informatika', 10)">- 10. évfolyam</li>
-                <li onclick="openSidebarGrade('Informatika', 11)">- 11. évfolyam</li>
-                <li onclick="openSidebarGrade('Informatika', 12)">- 12. évfolyam</li>
-            </ul>
-        </div>
-
-        <div class="grade-section">
-            <div class="grade-header" onclick="toggleGrade(this)">
-                <span>Gépész</span>
-                <span class="arrow">▼</span>
-            </div>
-            <ul class="subject-list">
-                <li onclick="openSidebarGrade('Gépész', 9)">- 9. évfolyam</li>
-                <li onclick="openSidebarGrade('Gépész', 10)">- 10. évfolyam</li>
-                <li onclick="openSidebarGrade('Gépész', 11)">- 11. évfolyam</li>
-                <li onclick="openSidebarGrade('Gépész', 12)">- 12. évfolyam</li>
-            </ul>
-        </div>
-
-        <div class="grade-section">
-            <div class="grade-header" onclick="toggleGrade(this)">
-                <span>Közgáz</span>
-                <span class="arrow">▼</span>
-            </div>
-            <ul class="subject-list">
-                <li onclick="openSidebarGrade('Közgáz', 9)">- 9. évfolyam</li>
-                <li onclick="openSidebarGrade('Közgáz', 10)">- 10. évfolyam</li>
-                <li onclick="openSidebarGrade('Közgáz', 11)">- 11. évfolyam</li>
-                <li onclick="openSidebarGrade('Közgáz', 12)">- 12. évfolyam</li>
-            </ul>
-        </div>
-
-        <div class="grade-section">
-            <div class="grade-header" onclick="toggleGrade(this)">
-                <span>Rendészet</span>
-                <span class="arrow">▼</span>
-            </div>
-            <ul class="subject-list">
-                <li onclick="openSidebarGrade('Rendészet', 9)">- 9. évfolyam</li>
-                <li onclick="openSidebarGrade('Rendészet', 10)">- 10. évfolyam</li>
-                <li onclick="openSidebarGrade('Rendészet', 11)">- 11. évfolyam</li>
-                <li onclick="openSidebarGrade('Rendészet', 12)">- 12. évfolyam</li>
-            </ul>
-        </div>
-
-        <div class="grade-section">
-            <div class="grade-header" onclick="toggleGrade(this)">
-                <span>Egészségügy</span>
-                <span class="arrow">▼</span>
-            </div>
-            <ul class="subject-list">
-                <li onclick="openSidebarGrade('Egészségügy', 9)">- 9. évfolyam</li>
-                <li onclick="openSidebarGrade('Egészségügy', 10)">- 10. évfolyam</li>
-                <li onclick="openSidebarGrade('Egészségügy', 11)">- 11. évfolyam</li>
-                <li onclick="openSidebarGrade('Egészségügy', 12)">- 12. évfolyam</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="main-content" id="mainContent">
-        <div class="header-logo">
-            <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="MSZC Logo">
-            <h1>MSZC Gépészeti Technikum - Digitális Tankönyvtár</h1>
-        </div>
-
-        <div class="grade-cards">
-            <div class="grade-card" onclick="openGrade(9)">
-                <div class="grade-icon">9</div>
-                <div class="grade-name">9. évfolyam</div>
-            </div>
-
-            <div class="grade-card" onclick="openGrade(10)">
-                <div class="grade-icon">10</div>
-                <div class="grade-name">10. évfolyam</div>
-            </div>
-
-            <div class="grade-card" onclick="openGrade(11)">
-                <div class="grade-icon">11</div>
-                <div class="grade-name">11. évfolyam</div>
-            </div>
-
-            <div class="grade-card" onclick="openGrade(12)">
-                <div class="grade-icon">12</div>
-                <div class="grade-name">12. évfolyam</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="majorModal" class="modal">
-        <div class="modal-content">
-            <h2 id="majorModalTitle">Válassz szakot</h2>
-            <div class="major-buttons">
-                <button onclick="selectMajor('Informatika')">💻 Informatika</button>
-                <button onclick="selectMajor('Gépész')">⚙️ Gépész</button>
-                <button onclick="selectMajor('Közgáz')">📊 Közgáz</button>
-                <button onclick="selectMajor('Rendészet')">🛡️ Rendészet</button>
-                <button onclick="selectMajor('Egészségügy')">⚕️ Egészségügy</button>
-            </div>
-
-            <div id="classSection" class="class-section">
-                <h3>Válassz tantárgyat</h3>
-                <p style="font-size: 14px; color: #666; margin-bottom: 20px; text-align: center;">
-                    ℹ️ Csak azok a tantárgyak jelennek meg, amelyekhez tankönyvet kaptál!
-                </p>
-                <div id="classList" class="class-list"></div>
-            </div>
-
-            <button class="close-modal" onclick="closeMajorModal()">Bezárás</button>
-        </div>
-    </div>
-
-    <div id="linksModal" class="modal">
-        <div class="modal-content links-modal">
-            <div class="links-header">
-                <h2 id="linksTitle"></h2>
-                <button class="close-modal" onclick="closeLinksModal()">✕</button>
-            </div>
-            <div class="links-container" id="linksContainer">
-                <div class="no-links-message">
-                    <div class="no-links-icon">📚</div>
-                    <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
-                    <p style="font-size: 14px; color: #999;">Hamarosan elérhető lesz!</p>
+        
+            <div id="registerScreen" style="display:none;">
+                <div id="authWrapper">
+                    <div class="auth-card">
+                        <h2>Regisztráció</h2>
+                        <form id="registerForm">
+                            <input type="text" id="regUsername" placeholder="Válassz felhasználónevet" required>
+                            <input type="email" id="regEmail" placeholder="E-mail cím" required>
+                            <input type="password" id="regPassword" placeholder="Jelszó" required>
+                            <input type="password" id="regPasswordConfirm" placeholder="Jelszó újra" required>
+                            <button type="submit">Fiók létrehozása</button>
+                        </form>
+                        <p id="registerError" style="color:red;">A jelszavak nem egyeznek!</p>
+                        <p id="registerSuccess" style="color:green;">Sikeres regisztráció! Most már beléphetsz.</p>
+                        <p>Van már fiókod? <span class="switch-link" onclick="showLogin()">Jelentkezz be!</span></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div id="mainContentWrapper"></div>
+        <button class="toggle-button" id="toggleBtn" onclick="toggleSidebar()">&gt;&gt;</button>
 
-    <script>
-        let currentGrade = null;
-        let currentMajor = null;
-        const subjectData = {
-            'Informatika': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
-                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
-                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
-            },
-            'Gépész': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
-                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
-                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Gépészeti alapismeretek'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Műszaki rajz']
-            },
-            'Közgáz': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
-                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Közgazdaságtan'],
-                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Üzleti ismeretek'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
-            },
-            'Rendészet': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Testnevelés'],
-                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Jog'],
-                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Rendészeti ismeretek'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
-            },
-            'Egészségügy': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
-                10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
-                11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Egészségügyi ismeretek'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Anatómia']
-            }
-        };
+        <div class="sidebar" id="sidebar">
+            <div class="logo-container">
+                <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" class="logo" alt="Gépészeti Logo">
+            </div>
 
-        const linksData = {
-            // Matematika 12
-            'Matematika_12_Informatika': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
-                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
-            ],
-            'Matematika_12_Gépész': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
-                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
-            ],
-            'Matematika_12_Közgáz': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
-                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
-            ],
-            'Matematika_12_Rendészet': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
-                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
-            ],
-            'Matematika_12_Egészségügy': [
-                { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
-                { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
-            ],
-            // Irodalom 12
-            'Irodalom_12_Informatika': [
-                { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
-                { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
-            ],
-            'Irodalom_12_Gépész': [
-                { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
-                { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
-            ],
-            'Irodalom_12_Közgáz': [
-                { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
-                { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
-            ],
-            'Irodalom_12_Rendészet': [
-                { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
-                { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
-            ],
-            'Irodalom_12_Egészségügy': [
-                { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
-                { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
-            ],
-            // Történelem 12t
-            'Történelem_12_Informatika': [
-                { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
-                { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
-            ],
-            'Történelem_12_Gépész': [
-                { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
-                { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
-            ],
-            'Történelem_12_Közgáz': [
-                { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
-                { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
-            ],
-            'Történelem_12_Rendészet': [
-                { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
-                { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
-            ],
-            'Történelem_12_Egészségügy': [
-                { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
-                { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
-            ],
-            // Állampolgári ismeretek 12
-            'Állampolgári ismeretek_12_Informatika': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
-            ],
-            'Állampolgári ismeretek_12_Gépész': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
-            ],
-            'Állampolgári ismeretek_12_Közgáz': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
-            ],
-            'Állampolgári ismeretek_12_Rendészet': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
-            ],
-            'Állampolgári ismeretek_12_Egészségügy': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
-            ],
-            // Magyar nyelv 12
-            'Magyar nyelv_12_Informatika': [
-                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
-            ],
-            'Magyar nyelv_12_Gépész': [
-                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
-            ],
-            'Magyar nyelv_12_Közgáz': [
-                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
-            ],
-            'Magyar nyelv_12_Rendészet': [
-                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
-            ],
-            'Magyar nyelv_12_Egészségügy': [
-                { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
-            ],
+            <div class="grade-section">
+                <div class="grade-header" onclick="toggleGrade(this)">
+                    <span>Informatika</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="subject-list">
+                    <li onclick="openSidebarGrade('Informatika', 9)">- 9. évfolyam</li>
+                    <li onclick="openSidebarGrade('Informatika', 10)">- 10. évfolyam</li>
+                    <li onclick="openSidebarGrade('Informatika', 11)">- 11. évfolyam</li>
+                    <li onclick="openSidebarGrade('Informatika', 12)">- 12. évfolyam</li>
+                </ul>
+            </div>
 
-    };
+            <div class="grade-section">
+                <div class="grade-header" onclick="toggleGrade(this)">
+                    <span>Gépész</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="subject-list">
+                    <li onclick="openSidebarGrade('Gépész', 9)">- 9. évfolyam</li>
+                    <li onclick="openSidebarGrade('Gépész', 10)">- 10. évfolyam</li>
+                    <li onclick="openSidebarGrade('Gépész', 11)">- 11. évfolyam</li>
+                    <li onclick="openSidebarGrade('Gépész', 12)">- 12. évfolyam</li>
+                </ul>
+            </div>
 
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('toggleBtn');
+            <div class="grade-section">
+                <div class="grade-header" onclick="toggleGrade(this)">
+                    <span>Közgáz</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="subject-list">
+                    <li onclick="openSidebarGrade('Közgáz', 9)">- 9. évfolyam</li>
+                    <li onclick="openSidebarGrade('Közgáz', 10)">- 10. évfolyam</li>
+                    <li onclick="openSidebarGrade('Közgáz', 11)">- 11. évfolyam</li>
+                    <li onclick="openSidebarGrade('Közgáz', 12)">- 12. évfolyam</li>
+                </ul>
+            </div>
 
-        sidebar.classList.toggle('visible');
-        toggleBtn.classList.toggle('shifted');
+            <div class="grade-section">
+                <div class="grade-header" onclick="toggleGrade(this)">
+                    <span>Rendészet</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="subject-list">
+                    <li onclick="openSidebarGrade('Rendészet', 9)">- 9. évfolyam</li>
+                    <li onclick="openSidebarGrade('Rendészet', 10)">- 10. évfolyam</li>
+                    <li onclick="openSidebarGrade('Rendészet', 11)">- 11. évfolyam</li>
+                    <li onclick="openSidebarGrade('Rendészet', 12)">- 12. évfolyam</li>
+                </ul>
+            </div>
 
-        if (sidebar.classList.contains('visible')) {
-            toggleBtn.innerHTML = '&lt;&lt;';
-        } else {
-            toggleBtn.innerHTML = '&gt;&gt;';
-        }
-    }
+            <div class="grade-section">
+                <div class="grade-header" onclick="toggleGrade(this)">
+                    <span>Egészségügy</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="subject-list">
+                    <li onclick="openSidebarGrade('Egészségügy', 9)">- 9. évfolyam</li>
+                    <li onclick="openSidebarGrade('Egészségügy', 10)">- 10. évfolyam</li>
+                    <li onclick="openSidebarGrade('Egészségügy', 11)">- 11. évfolyam</li>
+                    <li onclick="openSidebarGrade('Egészségügy', 12)">- 12. évfolyam</li>
+                </ul>
+            </div>
+        </div>
 
-    function toggleGrade(element) {
-        const subjectList = element.nextElementSibling;
-        const arrow = element.querySelector('.arrow');
+        <div class="main-content" id="mainContent">
+            <div class="header-logo">
+                <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="MSZC Logo">
+                <h1>MSZC Gépészeti Technikum - Digitális Tankönyvtár</h1>
+            </div>
 
-        subjectList.classList.toggle('open');
-        arrow.classList.toggle('open');
-    }
+            <div class="grade-cards">
+                <div class="grade-card" onclick="openGrade(9)">
+                    <div class="grade-icon">9</div>
+                    <div class="grade-name">9. évfolyam</div>
+                </div>
 
-    function openGrade(grade) {
-        currentGrade = grade;
-        document.getElementById('majorModalTitle').textContent = `Válassz szakot - ${grade}. évfolyam`;
-        document.getElementById('majorModal').style.display = 'flex';
-        document.getElementById('classSection').classList.remove('visible');
-        document.querySelector('.major-buttons').style.display = 'grid';
-    }
+                <div class="grade-card" onclick="openGrade(10)">
+                    <div class="grade-icon">10</div>
+                    <div class="grade-name">10. évfolyam</div>
+                </div>
 
-    function selectMajor(major) {
-        currentMajor = major;
-        const classList = document.getElementById('classList');
-        const classSection = document.getElementById('classSection');
+                <div class="grade-card" onclick="openGrade(11)">
+                    <div class="grade-icon">11</div>
+                    <div class="grade-name">11. évfolyam</div>
+                </div>
 
-        classList.innerHTML = '';
+                <div class="grade-card" onclick="openGrade(12)">
+                    <div class="grade-icon">12</div>
+                    <div class="grade-name">12. évfolyam</div>
+                </div>
+            </div>
+        </div>
 
-        const subjects = subjectData[major][currentGrade];
-        subjects.forEach(subject => {
-            const classItem = document.createElement('div');
-            classItem.className = 'class-item';
-            classItem.textContent = subject;
-            classItem.onclick = () => openLinks(subject, currentGrade, major);
-            classList.appendChild(classItem);
-        });
+        <div id="majorModal" class="modal">
+            <div class="modal-content">
+                <h2 id="majorModalTitle">Válassz szakot</h2>
+                <div class="major-buttons">
+                    <button onclick="selectMajor('Informatika')">💻 Informatika</button>
+                    <button onclick="selectMajor('Gépész')">⚙️ Gépész</button>
+                    <button onclick="selectMajor('Közgáz')">📊 Közgáz</button>
+                    <button onclick="selectMajor('Rendészet')">🛡️ Rendészet</button>
+                    <button onclick="selectMajor('Egészségügy')">⚕️ Egészségügy</button>
+                </div>
 
-        classSection.classList.add('visible');
-    }
+                <div id="classSection" class="class-section">
+                    <h3>Válassz tantárgyat</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 20px; text-align: center;">
+                        ℹ️ Csak azok a tantárgyak jelennek meg, amelyekhez tankönyvet kaptál!
+                    </p>
+                    <div id="classList" class="class-list"></div>
+                </div>
 
-    function closeMajorModal() {
-        document.getElementById('majorModal').style.display = 'none';
-        document.getElementById('classSection').classList.remove('visible');
-        currentGrade = null;
-        currentMajor = null;
-    }
+                <button class="close-modal" onclick="closeMajorModal()">Bezárás</button>
+            </div>
+        </div>
 
-    function openSidebarGrade(major, grade) {
-        currentGrade = grade;
-        currentMajor = major;
-        document.getElementById('majorModalTitle').textContent = `${major} - ${grade}. évfolyam - Válassz tantárgyat`;
-
-        const classList = document.getElementById('classList');
-        const classSection = document.getElementById('classSection');
-
-        classList.innerHTML = '';
-
-        const subjects = subjectData[major];
-        subjects.forEach(subject => {
-            const classItem = document.createElement('div');
-            classItem.className = 'class-item';
-            classItem.textContent = subject;
-            classItem.onclick = () => openLinks(subject, grade, major);
-            classList.appendChild(classItem);
-        });
-
-        classSection.classList.add('visible');
-        document.getElementById('majorModal').style.display = 'flex';
-
-        // Hide major selection buttons since we came from sidebar
-        document.querySelector('.major-buttons').style.display = 'none';
-    }
-
-    function openLinks(subject, year, major) {
-        closeMajorModal();
-
-        const displayText = `${subject} - ${year}. évfolyam (${major})`;
-        document.getElementById('linksTitle').textContent = displayText;
-
-        const linksContainer = document.getElementById('linksContainer');
-        linksContainer.innerHTML = '';
-
-        // Create a unique key for this combination
-        const linksKey = `${subject}_${year}_${major}`;
-        const links = linksData[linksKey];
-
-        if (links && links.length > 0) {
-            // If links exist, display them
-            links.forEach(link => {
-                const linkItem = document.createElement('a');
-                linkItem.className = 'link-item';
-                linkItem.href = link.url;
-                linkItem.target = '_blank';
-
-                linkItem.innerHTML = `
-                        <div class="link-item-content">
-                            <div class="link-item-title">${link.title}</div>
-                            <div class="link-item-description">${link.description}</div>
-                        </div>
-                        <div class="link-item-icon">📄</div>
-                    `;
-
-                linksContainer.appendChild(linkItem);
-            });
-        } else {
-            // If no links, show placeholder message
-            linksContainer.innerHTML = `
+        <div id="linksModal" class="modal">
+            <div class="modal-content links-modal">
+                <div class="links-header">
+                    <h2 id="linksTitle"></h2>
+                    <button class="close-modal" onclick="closeLinksModal()">✕</button>
+                </div>
+                <div class="links-container" id="linksContainer">
                     <div class="no-links-message">
                         <div class="no-links-icon">📚</div>
                         <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
                         <p style="font-size: 14px; color: #999;">Hamarosan elérhető lesz!</p>
                     </div>
-                `;
+                </div>
+            </div>
+        </div>
+        <script>
+            const loginScreen = document.getElementById('loginScreen');
+            const registerScreen = document.getElementById('registerScreen');
+            const appContent = document.getElementById('appContent');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+        
+            // --- SEGÉDFÜGGVÉNYEK A MEGJELENÍTÉSHEZ ---
+            function showLogin() {
+    loginScreen.style.display = "block";
+    registerScreen.style.display = "none";
+    mainContent.style.display = "none";
+    toggleBtn.style.display = "none";
+    if (window.logoutBtn) window.logoutBtn.style.display = "none";
+}
+
+function showRegister() {
+    loginScreen.style.display = "none";
+    registerScreen.style.display = "block";
+    mainContent.style.display = "none";
+    toggleBtn.style.display = "none";
+}
+
+const mainContent = document.getElementById('mainContent');
+
+function showMain() {
+    loginScreen.style.display = "none";
+    registerScreen.style.display = "none";
+    mainContent.style.display = "flex"; // Megjeleníti a főmenüt
+    toggleBtn.style.display = "block";
+    if (window.logoutBtn) window.logoutBtn.style.display = "block";
+}
+        
+            // --- BEJELENTKEZÉS ---
+            loginForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const usernameInput = document.getElementById("username").value;
+                const passwordInput = document.getElementById("password").value;
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                
+                const registeredUser = users.find(u => u.username === usernameInput && u.password === passwordInput);
+        
+                if (registeredUser || (usernameInput === "diak" && passwordInput === "12345")) {
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("currentUser", usernameInput);
+                    showMain();
+                } else {
+                    const errorMsg = document.getElementById('loginError');
+                    if (errorMsg) {
+                        errorMsg.style.display = "block";
+                        errorMsg.textContent = "Hibás felhasználónév vagy jelszó!";
+                    }
+                }
+            });
+        
+            // --- REGISZTRÁCIÓ VALIDÁCIÓVAL ---
+            registerForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                
+                const regName = document.getElementById("regUsername").value; 
+                const regEmail = document.getElementById("regEmail").value; // Feltételezve, hogy van ilyen ID-jű inputod
+                const p1 = document.getElementById("regPassword").value;
+                const p2 = document.getElementById("regPasswordConfirm").value;
+                const errorMsg = document.getElementById('registerError');
+                const successMsg = document.getElementById('registerSuccess');
+        
+                // 1. E-mail validáció (nem lehet a@a, kell a normális domain)
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailPattern.test(regEmail)) {
+                    errorMsg.style.display = "block";
+                    errorMsg.textContent = "Kérjük, adjon meg egy érvényes e-mail címet!";
+                    return;
+                }
+        
+                // 2. Jelszó erősség ellenőrzése
+                // Min 10 karakter, 1 nagybetű, 1 kisbetű, 1 speciális karakter
+                const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{10,}$/;
+                if (!passwordPattern.test(p1)) {
+                    errorMsg.style.display = "block";
+                    errorMsg.textContent = "A jelszónak min. 10 karakternek kell lennie, tartalmaznia kell kis- és nagybetűt, valamint speciális karaktert!";
+                    return;
+                }
+        
+                // 3. Jelszó egyezőség
+                if (p1 !== p2) {
+                    errorMsg.style.display = "block";
+                    errorMsg.textContent = "A két jelszó nem egyezik!";
+                    return;
+                }
+        
+                let users = JSON.parse(localStorage.getItem("users")) || [];
+        
+                // 4. Foglalt név ellenőrzése
+                if (users.some(u => u.username === regName)) {
+                    errorMsg.style.display = "block";
+                    errorMsg.textContent = "Ez a név már foglalt!";
+                    return;
+                }
+        
+                // MENTÉS (Most már az e-mail is bekerül)
+                users.push({ 
+                    username: regName, 
+                    email: regEmail, 
+                    password: p1 
+                });
+                localStorage.setItem("users", JSON.stringify(users));
+        
+                errorMsg.style.display = "none";
+                successMsg.style.display = "block";
+                successMsg.textContent = "Sikeres regisztráció!";
+        
+                setTimeout(showLogin, 2000);
+            });
+        
+            // --- KIJELENTKEZÉS ---
+            const logoutBtn = document.createElement("button");
+            logoutBtn.textContent = "Kijelentkezés";
+            logoutBtn.className = "logout-btn";
+            logoutBtn.onclick = () => {
+                localStorage.removeItem("loggedIn");
+                localStorage.removeItem("currentUser");
+                showLogin();
+            };
+            document.body.appendChild(logoutBtn);
+        
+            // Automatikus beléptetés ellenőrzése
+            if (localStorage.getItem("loggedIn") === "true") {
+                showMain();
+            } else {
+                showLogin();
+            }
+        </script>
+        <script>
+            let currentGrade = null;
+            let currentMajor = null;
+
+            // Subject data structure - subjects available for each major
+            const subjectData = {
+                'Informatika': {
+                    9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                    10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                    11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                    12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+                },
+                'Gépész': {
+                    9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                    10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
+                    11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Gépészeti alapismeretek'],
+                    12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Műszaki rajz']
+                },
+                'Közgáz': {
+                    9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
+                    10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Közgazdaságtan'],
+                    11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Üzleti ismeretek'],
+                    12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+                },
+                'Rendészet': {
+                    9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Testnevelés'],
+                    10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Jog'],
+                    11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Rendészeti ismeretek'],
+                    12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+                },
+                'Egészségügy': {
+                    9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
+                    10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Biológia'],
+                    11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Egészségügyi ismeretek'],
+                    12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Anatómia']
+                }
+            };
+
+            const linksData = {
+                // Matematika 12
+                'Matematika_12_Informatika': [
+                    { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                    { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
+                ],
+                'Matematika_12_Gépész': [
+                    { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                    { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
+                ],
+                'Matematika_12_Közgáz': [
+                    { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                    { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
+                ],
+                'Matematika_12_Rendészet': [
+                    { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                    { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
+                ],
+                'Matematika_12_Egészségügy': [
+                    { title: 'Matematika 12. évfolyam - Teljes tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MAT12TA__teljes.pdf', description: 'Matematika tankönyv' },
+                    { title: 'Függvénytáblázat 9-12. évfolyam ', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-FGV912GY__teljes.pdf', description: 'Matematikai, fizikai, kémiai és biológiai összefüggések' }
+                ],
+                // Irodalom 12
+                'Irodalom_12_Informatika': [
+                    { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
+                    { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
+                ],
+                'Irodalom_12_Gépész': [
+                    { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
+                    { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
+                ],
+                'Irodalom_12_Közgáz': [
+                    { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
+                    { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
+                ],
+                'Irodalom_12_Rendészet': [
+                    { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
+                    { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
+                ],
+                'Irodalom_12_Egészségügy': [
+                    { title: 'Irodalom 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12TB__teljes.pdf', description: 'Magyar irodalom tankönyv' },
+                    { title: 'Irodalom 12. évfolyam - Szöveggyűjtemény', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MIR12SZ__teljes.pdf', description: 'Magyar irodalom szöveggyűjtemény' }
+                ],
+                // Történelem 12t
+                'Történelem_12_Informatika': [
+                    { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
+                    { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
+                ],
+                'Történelem_12_Gépész': [
+                    { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
+                    { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
+                ],
+                'Történelem_12_Közgáz': [
+                    { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
+                    { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
+                ],
+                'Történelem_12_Rendészet': [
+                    { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
+                    { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
+                ],
+                'Történelem_12_Egészségügy': [
+                    { title: 'Történelem 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR12TB__teljes.pdf', description: 'Történelem tankönyv' },
+                    { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
+                ],
+                // Állampolgári ismeretek 12
+                'Állampolgári ismeretek_12_Informatika': [
+                    { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
+                ],
+                'Állampolgári ismeretek_12_Gépész': [
+                    { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
+                ],
+                'Állampolgári ismeretek_12_Közgáz': [
+                    { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
+                ],
+                'Állampolgári ismeretek_12_Rendészet': [
+                    { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
+                ],
+                'Állampolgári ismeretek_12_Egészségügy': [
+                    { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
+                ],
+                // Magyar nyelv 12
+                'Magyar nyelv_12_Informatika': [
+                    { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+                ],
+                'Magyar nyelv_12_Gépész': [
+                    { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+                ],
+                'Magyar nyelv_12_Közgáz': [
+                    { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+                ],
+                'Magyar nyelv_12_Rendészet': [
+                    { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+                ],
+                'Magyar nyelv_12_Egészségügy': [
+                    { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
+                ],
+
+        };
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleBtn');
+
+            sidebar.classList.toggle('visible');
+            toggleBtn.classList.toggle('shifted');
+
+            if (sidebar.classList.contains('visible')) {
+                toggleBtn.innerHTML = '&lt;&lt;';
+            } else {
+                toggleBtn.innerHTML = '&gt;&gt;';
+            }
         }
 
-        document.getElementById('linksModal').style.display = 'flex';
-    }
+        function toggleGrade(element) {
+            const subjectList = element.nextElementSibling;
+            const arrow = element.querySelector('.arrow');
 
-    function closeLinksModal() {
-        document.getElementById('linksModal').style.display = 'none';
-    }
+            subjectList.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
 
-    // Escape key to close modals
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
+        function openGrade(grade) {
+            currentGrade = grade;
+            document.getElementById('majorModalTitle').textContent = `Válassz szakot - ${grade}. évfolyam`;
+            document.getElementById('majorModal').style.display = 'flex';
+            document.getElementById('classSection').classList.remove('visible');
+            document.querySelector('.major-buttons').style.display = 'grid';
+        }
+
+        function selectMajor(major) {
+            currentMajor = major;
+            const classList = document.getElementById('classList');
+            const classSection = document.getElementById('classSection');
+
+            classList.innerHTML = '';
+
+            const subjects = subjectData[major][currentGrade];
+            subjects.forEach(subject => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.textContent = subject;
+                classItem.onclick = () => openLinks(subject, currentGrade, major);
+                classList.appendChild(classItem);
+            });
+
+            classSection.classList.add('visible');
+        }
+
+        function closeMajorModal() {
+            document.getElementById('majorModal').style.display = 'none';
+            document.getElementById('classSection').classList.remove('visible');
+            currentGrade = null;
+            currentMajor = null;
+        }
+
+        function openSidebarGrade(major, grade) {
+            currentGrade = grade;
+            currentMajor = major;
+            document.getElementById('majorModalTitle').textContent = `${major} - ${grade}. évfolyam - Válassz tantárgyat`;
+
+            const classList = document.getElementById('classList');
+            const classSection = document.getElementById('classSection');
+
+            classList.innerHTML = '';
+
+            const subjects = subjectData[major];
+            subjects.forEach(subject => {
+                const classItem = document.createElement('div');
+                classItem.className = 'class-item';
+                classItem.textContent = subject;
+                classItem.onclick = () => openLinks(subject, grade, major);
+                classList.appendChild(classItem);
+            });
+
+            classSection.classList.add('visible');
+            document.getElementById('majorModal').style.display = 'flex';
+
+            // Hide major selection buttons since we came from sidebar
+            document.querySelector('.major-buttons').style.display = 'none';
+        }
+
+        function openLinks(subject, year, major) {
             closeMajorModal();
-            closeLinksModal();
+
+            const displayText = `${subject} - ${year}. évfolyam (${major})`;
+            document.getElementById('linksTitle').textContent = displayText;
+
+            const linksContainer = document.getElementById('linksContainer');
+            linksContainer.innerHTML = '';
+
+            // Create a unique key for this combination
+            const linksKey = `${subject}_${year}_${major}`;
+            const links = linksData[linksKey];
+
+            if (links && links.length > 0) {
+                // If links exist, display them
+                links.forEach(link => {
+                    const linkItem = document.createElement('a');
+                    linkItem.className = 'link-item';
+                    linkItem.href = link.url;
+                    linkItem.target = '_blank';
+
+                    linkItem.innerHTML = `
+                            <div class="link-item-content">
+                                <div class="link-item-title">${link.title}</div>
+                                <div class="link-item-description">${link.description}</div>
+                            </div>
+                            <div class="link-item-icon">📄</div>
+                        `;
+
+                    linksContainer.appendChild(linkItem);
+                });
+            } else {
+                // If no links, show placeholder message
+                linksContainer.innerHTML = `
+                        <div class="no-links-message">
+                            <div class="no-links-icon">📚</div>
+                            <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
+                            <p style="font-size: 14px; color: #999;">Hamarosan elérhető lesz!</p>
+                        </div>
+                    `;
+            }
+
+            document.getElementById('linksModal').style.display = 'flex';
         }
-    });
-    </script>
-</body>
+
+        function closeLinksModal() {
+            document.getElementById('linksModal').style.display = 'none';
+        }
+
+        // Escape key to close modals
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeMajorModal();
+                closeLinksModal();
+            }
+        });
+        </script>
+    </body>
 </html>
