@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hu">
     <head>
         <meta charset="UTF-8">
@@ -1045,7 +1045,7 @@ function showMain() {
 
             classList.innerHTML = '';
 
-            const subjects = subjectData[major];
+            const subjects = subjectData[major][grade];
             subjects.forEach(subject => {
                 const classItem = document.createElement('div');
                 classItem.className = 'class-item';
