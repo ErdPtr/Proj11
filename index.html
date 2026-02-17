@@ -347,13 +347,11 @@
         .grade-cards {
             background-color: rgba(255,255,255,0.95);
             border-radius: 20px;
-            padding: clamp(24px, 5vw, 60px) clamp(20px, 6vw, 80px);
+            padding: clamp(28px, 5vw, 60px) clamp(28px, 6vw, 80px);
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            display: flex;
-            flex-wrap: wrap;
-            gap: clamp(20px, 4vw, 40px);
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(24px, 4vw, 48px);
             width: 100%;
             max-width: 900px;
         }
@@ -362,7 +360,6 @@
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s;
-            width: clamp(90px, 18vw, 140px);
             touch-action: manipulation;
         }
 
@@ -375,21 +372,21 @@
             }
 
         .grade-icon {
-            width: clamp(70px, 14vw, 120px);
-            height: clamp(70px, 14vw, 120px);
-            margin: 0 auto clamp(8px, 2vw, 15px);
+            width: clamp(100px, 20vw, 160px);
+            height: clamp(100px, 20vw, 160px);
+            margin: 0 auto clamp(10px, 2vw, 18px);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: clamp(28px, 6vw, 48px);
+            font-size: clamp(36px, 8vw, 64px);
             font-weight: bold;
             color: white;
         }
 
         .grade-name {
-            font-size: clamp(14px, 2.5vw, 18px);
+            font-size: clamp(15px, 2.5vw, 20px);
             font-weight: 500;
             color: #333;
         }
@@ -648,10 +645,6 @@
             .major-buttons {
                 grid-template-columns: repeat(3, 1fr);
             }
-
-            .grade-cards {
-                gap: 16px;
-            }
         }
 
         /* Mobile – 480px and below */
@@ -665,8 +658,8 @@
             }
 
             .grade-cards {
+                grid-template-columns: repeat(2, 1fr);
                 border-radius: 14px;
-                gap: 14px;
                 padding: 24px 16px;
             }
 
@@ -697,13 +690,8 @@
             }
 
             .grade-cards {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .grade-card {
-                flex-shrink: 0;
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 900px;
             }
 
             .links-container {
@@ -1114,19 +1102,19 @@
                 { title: 'Történelem 9-12. évfolyam - Atlasz', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-TOR912ATL__teljes.pdf', description: 'Történelmi atlasz' }
             ],
             'Állampolgári ismeretek_12_Informatika': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
+                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
             'Állampolgári ismeretek_12_Gépész': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
+                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
             'Állampolgári ismeretek_12_Közgáz': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
+                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
             'Állampolgári ismeretek_12_Rendészet': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
+                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
             'Állampolgári ismeretek_12_Egészségügy': [
-                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-ALP12TA__teljes.pdf', description: 'Állampolgári ismeretek tankönyv' }
+                { title: 'Állampolgári ismeretek 12. évfolyam', url: 'https://www.tankonyvkatalogus.hu/tankonyv/OH-ALP12TA', description: 'Állampolgári ismeretek tankönyv' }
             ],
             'Magyar nyelv_12_Informatika': [
                 { title: 'Magyar nyelv 12. évfolyam - Tankönyv', url: 'https://www.tankonyvkatalogus.hu/storage/pdf/OH-MNY12TB__teljes.pdf', description: 'Magyar nyelvtan tankönyv' }
@@ -1282,7 +1270,6 @@
             document.getElementById('linksModal').style.display = 'none';
         }
 
-        // Escape key to close modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeMajorModal();
@@ -1290,7 +1277,6 @@
             }
         });
 
-        // Also close sidebar on Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeSidebar();
         });
