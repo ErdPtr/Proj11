@@ -43,6 +43,7 @@
                 filter: blur(8px) brightness(0.7);
             }
 
+        /* ── AUTH SCREENS ── */
         #loginScreen, #registerScreen {
             position: fixed;
             top: 0;
@@ -94,7 +95,7 @@
                 padding: 12px 15px;
                 border: 1px solid #ddd;
                 border-radius: 8px;
-                font-size: 16px; 
+                font-size: 16px;
                 transition: border-color 0.3s;
                 -webkit-appearance: none;
             }
@@ -144,6 +145,7 @@
             display: none;
         }
 
+        /* ── LOGOUT BUTTON ── */
         .logout-btn {
             position: fixed;
             top: 15px;
@@ -166,6 +168,140 @@
                 color: #d9534f;
             }
 
+        /* ── CREDITS BUTTON ── */
+        .credits-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1100;
+            font-weight: bold;
+            font-size: 13px;
+            transition: all 0.3s;
+            touch-action: manipulation;
+            white-space: nowrap;
+        }
+
+            .credits-btn:hover {
+                background: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+        /* ── CREDITS MODAL ── */
+        .credits-modal {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px 0 0 0;
+            box-shadow: -4px -4px 20px rgba(0,0,0,0.3);
+            z-index: 2200;
+            width: min(400px, 90vw);
+            max-height: 70vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            animation: slideUpRight 0.3s ease-out;
+        }
+
+            .credits-modal.visible {
+                display: block;
+            }
+
+        @keyframes slideUpRight {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .credits-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 2150;
+        }
+
+            .credits-overlay.visible {
+                display: block;
+            }
+
+        .credits-content {
+            padding: clamp(24px, 5vw, 32px);
+        }
+
+        .credits-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+            .credits-header h2 {
+                margin: 0;
+                color: #333;
+                font-size: clamp(16px, 3vw, 20px);
+            }
+
+        .credits-close-btn {
+            background: #e0e0e0;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            touch-action: manipulation;
+            flex-shrink: 0;
+        }
+
+            .credits-close-btn:hover {
+                background: #d0d0d0;
+            }
+
+        .credits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .credit-item {
+            padding: 14px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .credit-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .credit-contribution {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* ── SIDEBAR ── */
         .sidebar {
             width: var(--sidebar-width);
             background-color: #4a4a4a;
@@ -273,6 +409,7 @@
                     background-color: rgba(255,255,255,0.1);
                 }
 
+        /* ── TOGGLE BUTTON ── */
         .toggle-button {
             position: fixed;
             left: 15px;
@@ -305,6 +442,7 @@
                 left: calc(var(--sidebar-width) + 15px);
             }
 
+        /* ── MAIN CONTENT ── */
         .main-content {
             flex: 1;
             display: flex;
@@ -338,6 +476,7 @@
                 line-height: 1.3;
             }
 
+        /* ── GRADE CARDS ── */
         .grade-cards {
             background-color: rgba(255,255,255,0.95);
             border-radius: 20px;
@@ -391,6 +530,7 @@
             color: #333;
         }
 
+        /* ── MODALS ── */
         .modal {
             display: none;
             position: fixed;
@@ -425,6 +565,7 @@
                 line-height: 1.3;
             }
 
+        /* ── MAJOR BUTTONS ── */
         .major-buttons {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -461,6 +602,7 @@
                     transform: translateY(0);
                 }
 
+        /* ── CLASS / SUBJECTS SECTION ── */
         .class-section {
             margin-top: 20px;
             padding-top: 20px;
@@ -529,6 +671,7 @@
                 background-color: #d0d0d0;
             }
 
+        /* ── LINKS MODAL ── */
         .links-modal {
             max-width: 700px;
         }
@@ -642,12 +785,18 @@
             margin-bottom: 15px;
         }
 
+        /* ═══════════════════════════════════════
+               RESPONSIVE BREAKPOINTS
+            ═══════════════════════════════════════ */
+
+        /* Tablet – 768px and below */
         @media (max-width: 768px) {
             .major-buttons {
                 grid-template-columns: repeat(3, 1fr);
             }
         }
 
+        /* Mobile – 480px and below */
         @media (max-width: 480px) {
             .major-buttons {
                 grid-template-columns: repeat(2, 1fr);
@@ -666,8 +815,16 @@
             .toggle-button.shifted {
                 left: 15px;
             }
+
+            .credits-modal {
+                width: 100vw;
+                border-radius: 20px 20px 0 0;
+                left: 0;
+                right: 0;
+            }
         }
 
+        /* Very small screens */
         @media (max-width: 360px) {
             .major-buttons {
                 grid-template-columns: 1fr 1fr;
@@ -680,6 +837,7 @@
                 }
         }
 
+        /* Landscape mobile */
         @media (max-height: 500px) and (orientation: landscape) {
             .main-content {
                 padding-top: 60px;
@@ -714,6 +872,7 @@
                 </div>
             </div>
         </div>
+
         <div id="registerScreen" style="display:none;">
             <div id="authWrapper">
                 <div class="auth-card">
@@ -732,12 +891,16 @@
             </div>
         </div>
     </div>
+
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
     <button class="toggle-button" id="toggleBtn" onclick="toggleSidebar()">&#9776;</button>
+
     <div class="sidebar" id="sidebar">
         <div class="logo-container">
             <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" class="logo" alt="Gépészeti Logo">
         </div>
+
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
                 <span>Informatika</span>
@@ -750,6 +913,7 @@
                 <li onclick="openSidebarGrade('Informatika', 12)">- 12. évfolyam</li>
             </ul>
         </div>
+
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
                 <span>Gépész</span>
@@ -762,6 +926,7 @@
                 <li onclick="openSidebarGrade('Gépész', 12)">- 12. évfolyam</li>
             </ul>
         </div>
+
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
                 <span>Közgáz</span>
@@ -774,6 +939,7 @@
                 <li onclick="openSidebarGrade('Közgáz', 12)">- 12. évfolyam</li>
             </ul>
         </div>
+
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
                 <span>Rendészet</span>
@@ -786,6 +952,7 @@
                 <li onclick="openSidebarGrade('Rendészet', 12)">- 12. évfolyam</li>
             </ul>
         </div>
+
         <div class="grade-section">
             <div class="grade-header" onclick="toggleGrade(this)">
                 <span>Egészségügy</span>
@@ -799,11 +966,13 @@
             </ul>
         </div>
     </div>
+
     <div class="main-content" id="mainContent">
         <div class="header-logo">
             <img src="https://mateszalka-gepeszeti.cms.intezmeny.edir.hu/uploads/gepesz_alap_5d3a12540c.png" alt="MSZC Logo">
             <h1>MSZC Gépészeti Technikum<br>Digitális Tankönyvtár</h1>
         </div>
+
         <div class="grade-cards">
             <div class="grade-card" onclick="openGrade(9)">
                 <div class="grade-icon">9</div>
@@ -823,6 +992,7 @@
             </div>
         </div>
     </div>
+
     <div id="majorModal" class="modal">
         <div class="modal-content">
             <h2 id="majorModalTitle">Válassz szakot</h2>
@@ -833,6 +1003,7 @@
                 <button onclick="selectMajor('Rendészet')">🛡️ Rendészet</button>
                 <button onclick="selectMajor('Egészségügy')">⚕️ Egészségügy</button>
             </div>
+
             <div id="classSection" class="class-section">
                 <h3>Válassz tantárgyat</h3>
                 <p style="font-size: 14px; color: #666; margin-bottom: 16px; text-align: center;">
@@ -840,11 +1011,11 @@
                 </p>
                 <div id="classList" class="class-list"></div>
             </div>
+
             <button class="close-modal" onclick="closeMajorModal()">Bezárás</button>
         </div>
     </div>
 
-    <!-- Links modal -->
     <div id="linksModal" class="modal">
         <div class="modal-content links-modal">
             <div class="links-header">
@@ -860,6 +1031,30 @@
             </div>
         </div>
     </div>
+
+    <button class="credits-btn" onclick="openCredits()">Köszönetnyilvánítás</button>
+
+    <div class="credits-overlay" id="creditsOverlay" onclick="closeCredits()"></div>
+
+    <div class="credits-modal" id="creditsModal">
+        <div class="credits-content">
+            <div class="credits-header">
+                <h2>Köszönetnyilvánítás</h2>
+                <button class="credits-close-btn" onclick="closeCredits()">✕</button>
+            </div>
+            <div class="credits-list">
+                <div class="credit-item">
+                    <div class="credit-name">Szatmáry Balázs</div>
+                    <div class="credit-contribution">Pénzügyi alapismeretek biztosítása digitalizálásra (12. évfolyam)</div>
+                </div>
+                <div class="credit-item">
+                    <div class="credit-name">MINTA</div>
+                    <div class="credit-contribution">MINTA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://wqrvbprrmdawoktcqjls.supabase.co';
@@ -867,6 +1062,7 @@
 
         const { createClient } = supabase;
         const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+
         const loginScreen = document.getElementById('loginScreen');
         const registerScreen = document.getElementById('registerScreen');
         const mainContent = document.getElementById('mainContent');
@@ -964,7 +1160,7 @@
             const { data, error: signUpError } = await sb.auth.signUp({
                 email,
                 password: p1,
-                options: { data: { username } }   
+                options: { data: { username } }
             });
 
             if (signUpError) {
@@ -1017,7 +1213,7 @@
 
         const subjectData = {
             'Informatika': {
-                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika', 'Komplex Természettudomány'],
+                9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Fizika'],
                 10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
                 11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
                 12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
@@ -1032,7 +1228,7 @@
                 9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem'],
                 10: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Közgazdaságtan'],
                 11: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Üzleti ismeretek'],
-                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek']
+                12: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Állampolgári ismeretek', 'Pénzügyi alapismeretek']
             },
             'Rendészet': {
                 9: ['Matematika', 'Magyar nyelv', 'Irodalom', 'Angol/Német nyelv', 'Történelem', 'Testnevelés'],
@@ -1232,7 +1428,6 @@
         }
 
         function openLinks(subject, year, major) {
-
             const displayText = `${subject} – ${year}. évfolyam (${major})`;
             document.getElementById('linksTitle').textContent = displayText;
 
@@ -1251,23 +1446,23 @@
                     linkItem.rel = 'noopener noreferrer';
 
                     linkItem.innerHTML = `
-                                <div class="link-item-content">
-                                    <div class="link-item-title">${link.title}</div>
-                                    <div class="link-item-description">${link.description}</div>
-                                </div>
-                                <div class="link-item-icon">📄</div>
-                            `;
+                            <div class="link-item-content">
+                                <div class="link-item-title">${link.title}</div>
+                                <div class="link-item-description">${link.description}</div>
+                            </div>
+                            <div class="link-item-icon">📄</div>
+                        `;
 
                     linksContainer.appendChild(linkItem);
                 });
             } else {
                 linksContainer.innerHTML = `
-                            <div class="no-links-message">
-                                <div class="no-links-icon">📚</div>
-                                <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
-                                <p style="font-size: 14px; color: #999;">Hamarosan elérhető lesz!</p>
-                            </div>
-                        `;
+                        <div class="no-links-message">
+                            <div class="no-links-icon">📚</div>
+                            <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
+                            <p style="font-size: 14px; color: #999;">Hamarosan elérhető lesz!</p>
+                        </div>
+                    `;
             }
 
             document.getElementById('linksModal').style.display = 'flex';
@@ -1276,17 +1471,25 @@
         function closeLinksModal() {
             document.getElementById('linksModal').style.display = 'none';
         }
-        
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeMajorModal();
                 closeLinksModal();
+                closeCredits();
+                closeSidebar();
             }
         });
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeSidebar();
-        });
+
+        function openCredits() {
+            document.getElementById('creditsModal').classList.add('visible');
+            document.getElementById('creditsOverlay').classList.add('visible');
+        }
+
+        function closeCredits() {
+            document.getElementById('creditsModal').classList.remove('visible');
+            document.getElementById('creditsOverlay').classList.remove('visible');
+        }
     </script>
 </body>
 </html>
