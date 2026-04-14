@@ -991,7 +991,27 @@
             font-weight: 400;
             color: #999;
             font-size: 11px;
+            margin-right: auto;
+            margin-left: 8px;
         }
+
+        .note-delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0.4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: opacity 0.15s, background 0.15s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+            .note-delete-btn:hover {
+                opacity: 1;
+                background: #ffe0e0;
+            }
 
         .note-text {
             font-size: 14px;
@@ -1680,14 +1700,15 @@
             const errorMsg = document.getElementById('loginError');
             errorMsg.style.display = 'none';
             setLoading('loginForm', true);
-            const { error } = await sb.auth.signInWithPassword({ email, password });
-            setLoading('loginForm', false);
+            const { data, error } = await sb.auth.signInWithPassword({ email, password });
+            // Az onAuthStateChange kezeli a showMain()-t, ezért itt csak a hibát kezeljük
             if (error) {
+                setLoading('loginForm', false);
                 errorMsg.style.display = 'block';
                 errorMsg.textContent = 'Hibás e-mail cím vagy jelszó!';
-            } else {
-                showMain();
             }
+            // Sikeres login esetén az onAuthStateChange hívja meg a showMain()-t,
+            // ami visszaállítja a gomb szövegét is
         });
 
         /* ─ Register ─ */
@@ -1736,10 +1757,15 @@
                 const { data: profile } = await sb.from('profiles').select('username').eq('id', currentUser.id).single();
                 currentUsername = profile?.username || currentUser.email;
                 updateProfileUI(currentUser, currentUsername);
+                // Visszaállítjuk a login gomb szövegét (ha beragadt "Kérlek várj…"-on)
+                const loginBtn = document.querySelector('#loginForm button[type="submit"]');
+                if (loginBtn) { loginBtn.disabled = false; loginBtn.textContent = 'Belépés'; }
                 showMain();
             } else {
                 currentUser = null;
                 currentUsername = '';
+                // Leiratkozás a notes realtime csatornáról
+                if (notesSubscription) { notesSubscription.unsubscribe(); notesSubscription = null; }
                 showLogin();
             }
         });
@@ -1758,8 +1784,9 @@
             div.dataset.id = note.id;
             div.innerHTML = `
                 <div class="note-author">
-                    <span>${escapeHtml(note.author_name)}</span>
+                    <span>${escapeHtml(currentUsername)}</span>
                     <span class="note-timestamp">${formatTime(note.created_at)}</span>
+                    <button class="note-delete-btn" onclick="deleteNote('${note.id}')" title="Törlés">🗑️</button>
                 </div>
                 <div class="note-text">${escapeHtml(note.content)}</div>
             `;
@@ -1775,20 +1802,20 @@
         }
 
         async function loadNotes() {
+            if (!currentUser) return;
             const list = document.getElementById('notesList');
             list.innerHTML = '<div class="notes-empty"><div class="notes-empty-icon">⏳</div><p>Betöltés…</p></div>';
 
-            // Csak a saját jegyzetek lekérése – a RLS policy már gondoskodik erről,
-            // de az author_id szűrő egy extra biztonsági réteg
             const { data, error } = await sb
                 .from('notes')
                 .select('*')
-                .eq('author_id', currentUser.id)
+                .eq('user_id', currentUser.id)
                 .order('created_at', { ascending: true });
 
             list.innerHTML = '';
 
             if (error) {
+                console.error('Notes load error:', error);
                 list.innerHTML = '<div class="notes-empty"><div class="notes-empty-icon">⚠️</div><p>Nem sikerült betölteni a jegyzeteket.</p></div>';
                 return;
             }
@@ -1804,20 +1831,32 @@
 
         function subscribeToNotes() {
             if (notesSubscription) return;
-            // Csak a saját inserteket figyeljük realtime-ban
             notesSubscription = sb
                 .channel('private:notes:' + currentUser.id)
                 .on('postgres_changes', {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'notes',
-                    filter: `author_id=eq.${currentUser.id}`
+                    filter: `user_id=eq.${currentUser.id}`
                 }, payload => {
                     const list = document.getElementById('notesList');
                     const empty = list.querySelector('.notes-empty');
                     if (empty) empty.remove();
                     list.appendChild(renderNote(payload.new));
                     list.scrollTop = list.scrollHeight;
+                })
+                .on('postgres_changes', {
+                    event: 'DELETE',
+                    schema: 'public',
+                    table: 'notes',
+                    filter: `user_id=eq.${currentUser.id}`
+                }, payload => {
+                    const el = document.querySelector(`.note-entry[data-id="${payload.old.id}"]`);
+                    if (el) el.remove();
+                    const list = document.getElementById('notesList');
+                    if (!list.querySelector('.note-entry')) {
+                        list.innerHTML = '<div class="notes-empty"><div class="notes-empty-icon">📭</div><p>Még nincs egyetlen bejegyzés sem.</p></div>';
+                    }
                 })
                 .subscribe();
         }
@@ -1844,18 +1883,44 @@
 
             const { error } = await sb.from('notes').insert({
                 content,
-                author_id: currentUser.id,
-                author_name: currentUsername
+                user_id: currentUser.id
             });
 
             btn.disabled = false;
 
             if (error) {
+                console.error('Note insert error:', error);
                 status.textContent = '⚠️ Hiba küldéskor. Próbáld újra.';
             } else {
                 input.value = '';
                 input.style.height = '';
                 status.textContent = '';
+            }
+        }
+
+        async function deleteNote(noteId) {
+            if (!currentUser) return;
+            // Optimista UI: azonnal eltávolítjuk, hiba esetén visszatöltjük
+            const el = document.querySelector(`.note-entry[data-id="${noteId}"]`);
+            if (el) el.style.opacity = '0.4';
+
+            const { error } = await sb
+                .from('notes')
+                .delete()
+                .eq('id', noteId)
+                .eq('user_id', currentUser.id);
+
+            if (error) {
+                console.error('Note delete error:', error);
+                if (el) el.style.opacity = '1';
+                document.getElementById('notesStatus').textContent = '⚠️ Törlés sikertelen.';
+            } else {
+                // Ha a realtime nem kapná el, manuálisan távolítjuk el
+                if (el) el.remove();
+                const list = document.getElementById('notesList');
+                if (!list.querySelector('.note-entry')) {
+                    list.innerHTML = '<div class="notes-empty"><div class="notes-empty-icon">📭</div><p>Még nincs egyetlen bejegyzés sem.</p></div>';
+                }
             }
         }
 
