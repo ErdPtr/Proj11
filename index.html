@@ -1608,7 +1608,14 @@
         const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxcnZicHJybWRhd29rdGNxamxzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjU1MjEsImV4cCI6MjA4NjkwMTUyMX0.kFoSOaBH1xN-SLFUINuecijcBsEACDSPxCtvztqoI2c';
 
         const { createClient } = supabase;
-        const sb = createClient(SUPABASE_URL, SUPABASE_ANON);
+        const sb = createClient(SUPABASE_URL, SUPABASE_ANON, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: false,
+                storageKey: 'dtt-auth'
+            }
+        });
 
         const loginScreen = document.getElementById('loginScreen');
         const registerScreen = document.getElementById('registerScreen');
@@ -1701,14 +1708,13 @@
             errorMsg.style.display = 'none';
             setLoading('loginForm', true);
             const { data, error } = await sb.auth.signInWithPassword({ email, password });
-            // Az onAuthStateChange kezeli a showMain()-t, ezért itt csak a hibát kezeljük
+            setLoading('loginForm', false);
             if (error) {
-                setLoading('loginForm', false);
                 errorMsg.style.display = 'block';
                 errorMsg.textContent = 'Hibás e-mail cím vagy jelszó!';
+            } else if (data?.session) {
+                await handleSession(data.session);
             }
-            // Sikeres login esetén az onAuthStateChange hívja meg a showMain()-t,
-            // ami visszaállítja a gomb szövegét is
         });
 
         /* ─ Register ─ */
@@ -1751,22 +1757,37 @@
         });
 
         /* ─ Auth state ─ */
-        sb.auth.onAuthStateChange(async (event, session) => {
+        let authInitialized = false;
+
+        async function handleSession(session) {
             if (session) {
                 currentUser = session.user;
                 const { data: profile } = await sb.from('profiles').select('username').eq('id', currentUser.id).single();
                 currentUsername = profile?.username || currentUser.email;
                 updateProfileUI(currentUser, currentUsername);
-                // Visszaállítjuk a login gomb szövegét (ha beragadt "Kérlek várj…"-on)
-                const loginBtn = document.querySelector('#loginForm button[type="submit"]');
-                if (loginBtn) { loginBtn.disabled = false; loginBtn.textContent = 'Belépés'; }
                 showMain();
             } else {
                 currentUser = null;
                 currentUsername = '';
-                // Leiratkozás a notes realtime csatornáról
                 if (notesSubscription) { notesSubscription.unsubscribe(); notesSubscription = null; }
                 showLogin();
+            }
+        }
+
+        // Explicit session check on load – this is the reliable source of truth
+        sb.auth.getSession().then(({ data: { session } }) => {
+            authInitialized = true;
+            handleSession(session);
+        });
+
+        sb.auth.onAuthStateChange(async (event, session) => {
+            // Ignore the very first INITIAL_SESSION fired by onAuthStateChange —
+            // getSession() above already handled it reliably.
+            if (!authInitialized) return;
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                handleSession(session);
+            } else if (event === 'SIGNED_OUT') {
+                handleSession(null);
             }
         });
 
@@ -1783,13 +1804,13 @@
             div.className = 'note-entry';
             div.dataset.id = note.id;
             div.innerHTML = `
-                <div class="note-author">
-                    <span>${escapeHtml(currentUsername)}</span>
-                    <span class="note-timestamp">${formatTime(note.created_at)}</span>
-                    <button class="note-delete-btn" onclick="deleteNote('${note.id}')" title="Törlés">🗑️</button>
-                </div>
-                <div class="note-text">${escapeHtml(note.content)}</div>
-            `;
+                    <div class="note-author">
+                        <span>${escapeHtml(currentUsername)}</span>
+                        <span class="note-timestamp">${formatTime(note.created_at)}</span>
+                        <button class="note-delete-btn" onclick="deleteNote('${note.id}')" title="Törlés">🗑️</button>
+                    </div>
+                    <div class="note-text">${escapeHtml(note.content)}</div>
+                `;
             return div;
         }
 
@@ -2285,22 +2306,22 @@
                     linkItem.target = '_blank';
                     linkItem.rel = 'noopener noreferrer';
                     linkItem.innerHTML = `
-                        <div class="link-item-content">
-                            <div class="link-item-title">${link.title}</div>
-                            <div class="link-item-description">${link.description}</div>
-                        </div>
-                        <div class="link-item-icon">📄</div>
-                    `;
+                            <div class="link-item-content">
+                                <div class="link-item-title">${link.title}</div>
+                                <div class="link-item-description">${link.description}</div>
+                            </div>
+                            <div class="link-item-icon">📄</div>
+                        `;
                     linksContainer.appendChild(linkItem);
                 });
             } else {
                 linksContainer.innerHTML = `
-                    <div class="no-links-message">
-                        <div class="no-links-icon">📚</div>
-                        <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
-                        <p style="font-size:14px;color:#999;">Hamarosan elérhető lesz!</p>
-                    </div>
-                `;
+                        <div class="no-links-message">
+                            <div class="no-links-icon">📚</div>
+                            <p>Még nincsenek linkek ehhez a tantárgyhoz</p>
+                            <p style="font-size:14px;color:#999;">Hamarosan elérhető lesz!</p>
+                        </div>
+                    `;
             }
             document.getElementById('linksModal').style.display = 'flex';
         }
